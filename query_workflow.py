@@ -1,3 +1,4 @@
+import argparse
 import dotenv
 
 from spark_nl import (
@@ -22,18 +23,15 @@ from evaluation import (
     evaluate_spark_sql
 )
 
-QUERY_ID = 2
-
-def benchmark_query():
+def benchmark_query(query_id):
 
     dotenv.load_dotenv()
 
     spark_session = get_spark_session()
 
-    database_name, nl_query, golden_query = load_query_info(QUERY_ID)
+    database_name, nl_query, golden_query = load_query_info(query_id)
     golden_query_spark = translate_sqlite_to_spark(golden_query)
-    print(f"--- Benchmarking Query ID {QUERY_ID} on Database '{database_name}' ---")
-    print(f"NL Query: {nl_query}")
+    print(f"--- Benchmarking Query ID {query_id} on Database '{database_name}' ---")
     load_tables(spark_session, database_name)
     spark_sql = get_spark_sql()
     llm = get_llm()
@@ -42,10 +40,12 @@ def benchmark_query():
     json_result = process_result()
     print_results(json_result)
     # pretty_print_cot(json_result)
+    
+    print(f"NL Query: \033[92m{nl_query}\033[0m")
+    print(f"Golden Query (Spark SQL): \033[93m{golden_query_spark}\033[0m")
 
     if json_result["execution_status"] == "VALID":
         ground_truth_df = run_sparksql_query(spark_session, golden_query_spark)
-        print(f"Golden Query (Spark SQL): \033[93m{golden_query_spark}\033[0m")
         print("Ground Truth:")
         ground_truth_df.show()
 
@@ -60,5 +60,10 @@ def benchmark_query():
             em_score = evaluate_spark_sql(golden_query_spark, spark_sql_query, spark_session)
             print(f"Spider Exact Match Score: {em_score}")
 
+
 if __name__ == "__main__":
-    benchmark_query()
+    parser = argparse.ArgumentParser(description="Benchmark a specific query ID.")
+    parser.add_argument("--id", type=int, default=1, help="Query ID to benchmark (default: 1)")
+    args = parser.parse_args()
+    
+    benchmark_query(args.id)

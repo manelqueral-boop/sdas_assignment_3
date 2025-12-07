@@ -97,11 +97,11 @@ Structure should look like:
 To run the benchmark workflow which processes a natural language query, converts it to Spark SQL, and evaluates it:
 
 ```bash
-python3 query_workflow.py
+python3 query_workflow.py --id 2
 ```
 
 This script will:
-1.  Load a sample query (ID 2 by default).
+1.  Load a sample query (the query with ID 2, in this case).
 2.  Use the LLM to generate a Spark SQL query.
 3.  Execute the generated query.
 4.  Compare the result with the ground truth (Jaccard Index).

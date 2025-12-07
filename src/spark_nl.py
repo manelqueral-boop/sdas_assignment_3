@@ -172,6 +172,7 @@ def run_nl_query(agent, nl_query):
                 break
 
     try:
+        nl_query = nl_query + "\n\n" + config.DEFAULT_PROMPT_SUFIX
         response = agent.invoke({"input": nl_query}, config={"callbacks": [cb]})
         final_answer = response['output']
 
@@ -220,7 +221,7 @@ def process_result():
     return json_result
 
 
-def print_results(json_result):
+def print_results(json_result, print_result=False):
     print("\n" + "="*40)
     print(" PERFORMANCE METRICS")
     print("="*40)
@@ -248,13 +249,13 @@ def print_results(json_result):
     print(f"5. Input Tokens             : {json_result.get('input_tokens')}")
     print(f"6. Output Tokens            : {json_result.get('output_tokens')}")
     
-    print(f"Spark Query: {json_result.get('sparksql_query')}")
+    print(f"Spark Query: {color_start}{json_result.get('sparksql_query')}{color_end}")
     
     error = json_result.get("spark_error")
     print(f"Spark Error (first 50 chars): {error[:50] if error else 'None'}")
     print("="*40)
     
-    if json_result.get('execution_status') == "VALID":
+    if json_result.get('execution_status') == "VALID" and print_result:
         print(f"Query Result: {json_result.get('query_result')}")
 
 
