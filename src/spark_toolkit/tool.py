@@ -43,7 +43,10 @@ class QuerySparkSQLTool(BaseSparkSQLTool, BaseTool):
         run_manager: Optional[CallbackManagerForToolRun] = None,
     ) -> str:
         """Execute the query, return the results or an error message."""
+
         return self.db.run_no_throw(query)
+                #.sql(query)
+                #self.db.run_no_throw(query)
 
 
 class InfoSparkSQLTool(BaseSparkSQLTool, BaseTool):

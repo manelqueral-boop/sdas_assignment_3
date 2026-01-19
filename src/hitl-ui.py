@@ -1,7 +1,10 @@
-import argparse
+import os
+import sys
 import dotenv
-import pandas as pd
-import json
+import argparse
+
+# Add src to path to allow imports
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
 from spark_nl import (
     get_spark_session,
@@ -10,9 +13,7 @@ from spark_nl import (
     run_nl_query,
     process_result,
     print_results,
-    pretty_print_cot,
-    run_sparksql_query,
-    save_results
+    run_sparksql_query
 )
 from benchmark_ds import (
     load_tables,
@@ -22,48 +23,44 @@ from llm import get_llm
 from evaluation import (
     translate_sqlite_to_spark,
     jaccard_index,
-    result_to_obj,
     evaluate_spark_sql
 )
 
-def benchmark_query(query_id, provider):
-
+def benchmark_nl_query(query_id, user_nl_query, provider):
     dotenv.load_dotenv()
 
     spark_session = get_spark_session()
 
-    database_name, nl_query, golden_query = load_query_info(query_id)
+    # Load context (DB name, golden query) from the benchmark dataset
+    database_name, original_nl_query, golden_query = load_query_info(query_id)
     golden_query_spark = translate_sqlite_to_spark(golden_query)
+    
     print(f"--- Benchmarking Query ID {query_id} on Database '{database_name}' ---")
+    print(f"Original NL Query (from DB): {original_nl_query}")
+    print(f"User NL Query (from CLI): {user_nl_query}")
+    
     load_tables(spark_session, database_name)
-    #exit()
     spark_sql = get_spark_sql()
     llm = get_llm(provider=provider)
     agent = get_spark_agent(spark_sql, llm=llm)
-    run_nl_query(agent, nl_query, llm=llm)
-    json_result = process_result()
-    #with open("test.json", "r") as f:
-    #    json_result = json.load(f)
-    print_results(json_result)
-    save_results(json_result)
-    # pretty_print_cot(json_result)
     
-    print(f"NL Query: \033[92m{nl_query}\033[0m")
+    # Run the agent with the USER provided NL query
+    run_nl_query(agent, user_nl_query)
+    json_result = process_result()
+    print_results(json_result)
+
+    print(f"User NL Query (from CLI): {user_nl_query}")
     print(f"Golden Query (Spark SQL): \033[93m{golden_query_spark}\033[0m")
 
+    # Evaluation
     if json_result["execution_status"] == "VALID":
         ground_truth_df = run_sparksql_query(spark_session, golden_query_spark)
         print("Ground Truth:")
         ground_truth_df.show()
 
         # Execution Accuracy
-        inferred_result = run_sparksql_query(spark_session,json_result["sparksql_query"])#json_result["query_result"]
-        print(type(inferred_result))
-        #if isinstance(inferred_result,list):
-        #    inferred_result = spark_session.createDataFrame(inferred_result,schema=["Result"])
-        #    #exit()
-        print("Type of ground truth: "+str(type(ground_truth_df)))
-        print(type(inferred_result))
+        inferred_result = run_sparksql_query(spark_session, json_result["sparksql_query"])
+        #inferred_result = json_result["query_result"]
         ea = jaccard_index(ground_truth_df, inferred_result)
         print(f"Jaccard Index: {ea}")
 
@@ -73,11 +70,12 @@ def benchmark_query(query_id, provider):
             em_score = evaluate_spark_sql(golden_query_spark, spark_sql_query, spark_session)
             print(f"Spider Exact Match Score: {em_score}")
 
-
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Benchmark a specific query ID.")
-    parser.add_argument("--id", type=int, default=1, help="Query ID to benchmark (default: 1)")
+    parser = argparse.ArgumentParser(description="Run NL2SQL workflow with a custom NL query.")
+    parser.add_argument("--id", type=int, default=2, help="Query ID from the benchmark (for context/ground truth)")
+    parser.add_argument("--nl-query", type=str, required=True, help="The Natural Language Query to process")
     parser.add_argument("--provider", type=str, default="google", help="LLM provider (default: google)")
+    
     args = parser.parse_args()
     
-    benchmark_query(args.id, args.provider)
+    benchmark_nl_query(args.id, args.nl_query, args.provider)

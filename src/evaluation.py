@@ -21,10 +21,12 @@ def translate_sqlite_to_spark(sqlite_query):
 
 def result_to_obj(s):
     if s and isinstance(s, str):
+        print(s)
         try:
             parsed = json.loads(s)
         except Exception:
             try:
+                print("literal")
                 parsed = ast.literal_eval(s)
             except Exception:
                 parsed = [{"value": s}]
@@ -55,15 +57,20 @@ def jaccard_index(df1, df2):
         s1 = {(f.name, f.dataType.simpleString()) for f in df1.schema.fields}
         s2 = {(f.name, f.dataType.simpleString()) for f in df2.schema.fields}
 
-        if s1 != s2:
+        #if s1 != s2:
             #no same schema, then jaccard distance is 0
-            return 0
+            #return 0
         
         #turn every row into a json string of pairs column_name : value. Finally retrieve a table where each row is the string
         #corresponding to each row
         sig1 = df1.select(F.to_json(F.struct(*df1.columns)).alias("sig")).distinct()
         sig2 = df2.select(F.to_json(F.struct(*df2.columns)).alias("sig")).distinct()
 
+        print("1")
+        sig1.show(3,truncate=False)
+
+        print("2")
+        sig2.show(3,truncate=False)
         #perform intersection and union of signatures of each row.
         inter = sig1.intersect(sig2).count()
         union = sig1.union(sig2).distinct().count()
