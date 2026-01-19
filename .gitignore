@@ -1,6 +1,7 @@
 db/*
 sample/
 
+*.sqlite
 *.db
 .env
 
