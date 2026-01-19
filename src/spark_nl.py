@@ -147,13 +147,15 @@ def get_spark_sql():
 def run_sparksql_query(spark_session, query):
     """
     Runs a Spark SQL query on a given Spark session.
-
+    Returns dataframe containing the result of running
     Args:
         spark_session: Spark session to run the query on.
         query: A string with the Spark SQL query to run.
     """
-    
-    pass
+
+    result = spark_session.sql(query)
+
+    return result
 
 
 def get_spark_agent(spark_sql, llm):
@@ -221,6 +223,7 @@ def run_nl_query(agent, nl_query, llm=None):
                 break
 
     try:
+        print(f"Query being passed to agent is : {nl_query}")
         nl_query = nl_query + "\n\n" + config.DEFAULT_PROMPT_SUFIX
         from langchain_core.messages import HumanMessage
         response = agent.invoke({"messages": [HumanMessage(content=nl_query)]}, config={"callbacks": [cb]})

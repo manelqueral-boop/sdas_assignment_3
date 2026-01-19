@@ -40,12 +40,24 @@ def jaccard_index(df1, df2):
 
     """
     Calculates the Jaccard index between two dataframes.
-
     Args:
         df1: The first dataframe.
         df2: The second dataframe.
     """
-    pass
+    #assuming df1 has the ground truth
+    intersect = 0
+    union = 0
+
+    for column in df1.columns:
+        
+        set_ground_truth = set(df1[column])
+        set_predicted = set(df2[column])
+
+        intersect += len(set_ground_truth.intersection(set_predicted))
+        union += len(set_ground_truth)
+
+    return intersect/union
+
 
 # -----------------------------------------------------------------------------
 # Spider Evaluation Logic (adapted from https://github.com/taoyds/spider)
