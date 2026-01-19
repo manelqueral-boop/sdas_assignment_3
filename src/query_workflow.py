@@ -1,6 +1,7 @@
 import argparse
 import dotenv
-
+import pandas as pd
+import json
 
 from spark_nl import (
     get_spark_session,
@@ -35,11 +36,14 @@ def benchmark_query(query_id, provider):
     golden_query_spark = translate_sqlite_to_spark(golden_query)
     print(f"--- Benchmarking Query ID {query_id} on Database '{database_name}' ---")
     load_tables(spark_session, database_name)
+    #exit()
     spark_sql = get_spark_sql()
     llm = get_llm(provider=provider)
     agent = get_spark_agent(spark_sql, llm=llm)
-    run_nl_query(agent, nl_query, llm=llm)
-    json_result = process_result()
+    #run_nl_query(agent, nl_query, llm=llm)
+    #json_result = process_result()
+    with open("test.json", "r") as f:
+        json_result = json.load(f)
     print_results(json_result)
     save_results(json_result)
     # pretty_print_cot(json_result)
@@ -54,6 +58,13 @@ def benchmark_query(query_id, provider):
 
         # Execution Accuracy
         inferred_result = json_result["query_result"]
+        print(type(inferred_result))
+        if isinstance(inferred_result,list):
+            inferred_result = spark_session.createDataFrame(inferred_result,schema=["Result"])
+            #exit()
+        print("Type of ground truth: "+str(type(ground_truth_df)))
+        print(type(inferred_result))
+        #turn to dataframe
         ea = jaccard_index(ground_truth_df, inferred_result)
         print(f"Jaccard Index: {ea}")
 

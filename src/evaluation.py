@@ -48,15 +48,18 @@ def jaccard_index(df1, df2):
     intersect = 0
     union = 0
 
-    for column in df1.columns:
-        
-        set_ground_truth = set(df1[column])
-        set_predicted = set(df2[column])
+    for c1, c2 in zip(df1.columns, df2.columns):
+        a = df1.select(c1)
+        b = df2.select(c2)
 
-        intersect += len(set_ground_truth.intersection(set_predicted))
-        union += len(set_ground_truth)
+        (a.intersect(b)).show()
+        #jaccard = (
+         #   a.intersect(b).count() /
+         #   a.union(b).distinct().count()
+        #)
 
-    return intersect/union
+        #print(f"{c1} vs {c2}: {jaccard}")
+
 
 
 # -----------------------------------------------------------------------------
