@@ -3,7 +3,7 @@ import json
 import re
 import sqlglot
 import pandas as pd
-import pyspark.sql
+from pyspark.sql import functions as F
 
 #TODO
 def translate_sqlite_to_spark(sqlite_query):
@@ -49,18 +49,28 @@ def jaccard_index(df1, df2):
     union = 0
 
     for c1, c2 in zip(df1.columns, df2.columns):
-        a = df1.select(c1)
-        b = df2.select(c2)
 
-        (a.intersect(b)).show()
-        #jaccard = (
-         #   a.intersect(b).count() /
-         #   a.union(b).distinct().count()
-        #)
+        res = 0
+        #compare schemas
+        s1 = {(f.name, f.dataType.simpleString()) for f in df1.schema.fields}
+        s2 = {(f.name, f.dataType.simpleString()) for f in df2.schema.fields}
 
-        #print(f"{c1} vs {c2}: {jaccard}")
+        if s1 != s2:
+            #no same schema, then jaccard distance is 0
+            return 0
+        
+        #turn every row into a json string of pairs column_name : value. Finally retrieve a table where each row is the string
+        #corresponding to each row
+        sig1 = df1.select(F.to_json(F.struct(*df1.columns)).alias("sig")).distinct()
+        sig2 = df2.select(F.to_json(F.struct(*df2.columns)).alias("sig")).distinct()
 
+        #perform intersection and union of signatures of each row.
+        inter = sig1.intersect(sig2).count()
+        union = sig1.union(sig2).distinct().count()
 
+        return inter / union if union else 1.0
+
+        return res
 
 # -----------------------------------------------------------------------------
 # Spider Evaluation Logic (adapted from https://github.com/taoyds/spider)

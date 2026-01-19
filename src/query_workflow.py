@@ -64,7 +64,6 @@ def benchmark_query(query_id, provider):
             #exit()
         print("Type of ground truth: "+str(type(ground_truth_df)))
         print(type(inferred_result))
-        #turn to dataframe
         ea = jaccard_index(ground_truth_df, inferred_result)
         print(f"Jaccard Index: {ea}")
 
