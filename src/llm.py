@@ -24,7 +24,20 @@ def get_llm(
         model: The name of the language model to use.
         temperature: The temperature to use for the language model.
     """
-    pass
+
+    
+    if model is None:
+        model = "gemini-2.5-flash"
+
+    interface = ChatGoogleGenerativeAI(
+        model=model,
+        temperature=temperature,  
+        max_tokens=None,
+        timeout=None,
+        max_retries=2,
+    )
+
+    return interface
 
 
 def get_cloudflare_neuron_pricing(model_name):

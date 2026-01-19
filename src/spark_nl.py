@@ -3,6 +3,7 @@ import time
 import json
 import datetime
 import uuid
+import os
 
 from pyspark.sql import SparkSession
 from langchain_core.callbacks import BaseCallbackHandler
@@ -101,7 +102,19 @@ def get_spark_session():
     """
     Creates a Spark session with SQLite access.
     """
-    pass
+    #spark = SparkSession.builder.master("local").appName('Spark').config(
+     #   "spark.jars",
+      #  "{}/sqlite-jdbc-3.34.0.jar".format(os.getcwd())).getOrCreate()
+    print("{}/sqlite-jdbc-3.34.0.jar".format(os.getcwd()))
+    spark = SparkSession.builder.master("local").appName("SQLite JDBC").config(
+        "spark.jars",
+        "{}/sqlite-jdbc-3.34.0.jar".format(os.getcwd())).config(
+        "spark.driver.extraClassPath",
+        "{}/sqlite-jdbc-3.34.0.jar".format(os.getcwd())).getOrCreate()
+    #.config(
+     #   "spark.driver.extraClassPath",
+      #  "{}/sqlite-jdbc-3.34.0.jar".format(os.getcwd()))
+    return spark
 
 
 def get_schema_manually(self, table_names):
@@ -139,6 +152,7 @@ def run_sparksql_query(spark_session, query):
         spark_session: Spark session to run the query on.
         query: A string with the Spark SQL query to run.
     """
+    
     pass
 
 

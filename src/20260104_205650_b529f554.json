@@ -1,0 +1,23 @@
+{
+    "sparksql_query": null,
+    "execution_status": "NOT_EXECUTED",
+    "query_result": null,
+    "spark_error": null,
+    "total_time": 3.9606642723083496,
+    "spark_time": -1,
+    "translation_time": 0.0,
+    "llm_requests": 4,
+    "chain_of_thought": [
+        "Action: list_tables_sql_db\nAction Input: {}",
+        "Observation: content='' name='list_tables_sql_db' tool_call_id='daf9e87a-cc95-4a7a-b935-54eb55cbd6a7'",
+        "Action: list_tables_sql_db\nAction Input: {'tool_input': ''}",
+        "Observation: content='' name='list_tables_sql_db' tool_call_id='577403e6-27a6-4f8b-9d96-f4fad0eb648a'",
+        "Action: schema_sql_db\nAction Input: {'table_names': 'fprm'}",
+        "Observation: content='' name='schema_sql_db' tool_call_id='7182e27f-bd48-4399-9db7-ef0f2785f375'"
+    ],
+    "input_tokens": 2498,
+    "output_tokens": 394,
+    "cloudflare_neurons": null,
+    "prompt": "System: You are an agent designed to interact with Spark SQL.\nGiven an input question, create a syntactically correct Spark SQL query to run, then look at the results of the query and return the answer.\nDon't limit the result size.\nYou can order the results by a relevant column to return the most interesting examples in the database.\nNever query for all the columns from a specific table, only ask for the relevant columns given the question.\nYou have access to tools for interacting with the database.\nOnly use the below tools. Only use the information returned by the below tools to construct your final answer.\nYou MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again.\n\nDO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.\n\nIf the question does not seem related to the database, just return \"I don't know\" as the answer.\n\nHuman: Please list the zip code of all the charter schools in Fresno County Office of Education. Charter schools refers to `Charter School (Y/N)` = 1 in the table fprm\n\n\nAI: {'name': 'list_tables_sql_db', 'arguments': '{}'}\nTool: \nAI: {'name': 'list_tables_sql_db', 'arguments': '{\"tool_input\": \"\"}'}\nTool: \nAI: {'name': 'schema_sql_db', 'arguments': '{\"table_names\": \"fprm\"}'}\nTool: ",
+    "final_answer": "I don't know"
+}

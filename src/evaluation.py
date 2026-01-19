@@ -13,7 +13,11 @@ def translate_sqlite_to_spark(sqlite_query):
     Args:
         sqlite_query: A String with the SQLite query to transpile.
     """
-    pass
+    return sqlglot.transpile(
+        sqlite_query,
+        read="sqlite", write="spark"
+    )[0]
+    
 
 def result_to_obj(s):
     if s and isinstance(s, str):

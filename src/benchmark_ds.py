@@ -16,12 +16,27 @@ def load_tables(spark_session, db_name):
         spark_session: Spark session to use for loading tables.
         db_name: Name of the SQLite database file to load tables from.
     """
-    pass
+
+    parent_dir = os.path.dirname(os.getcwd())
+
+    path_to_tables = os.path.join(parent_dir,"db",db_name,"database_description")
+
+    path_to_sql_file = os.path.join(parent_dir,"db",db_name)
+
+    for table_name in os.listdir(path_to_tables):
+
+        df = spark_session.read.format('jdbc').options(driver='org.sqlite.JDBC', dbtable=table_name[:-4],
+                 url="jdbc:sqlite:"+os.path.join(path_to_sql_file,db_name+".sqlite")).load()
+
 
 
 def load_query_info(query_id: int):
 
-    query_data_file = os.path.join(DB_PATH, BENCHMARK_FILE)
+    #had to move query_workflow to src, so this finds it in db
+    current_dir = os.getcwd()
+    parent_dir = os.path.dirname(current_dir)
+
+    query_data_file = os.path.join(parent_dir,DB_PATH, BENCHMARK_FILE)
     with open(query_data_file, 'r') as f:
         all_queries = json.load(f)
 
