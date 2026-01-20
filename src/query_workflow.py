@@ -102,6 +102,9 @@ def benchmark_query(query_id, provider):
                 "llm_querry": "None",
                 "gold_querry": golden_query_spark,
                 "llm_requests": json_result["llm_requests"],
+                "total_time": json_result["total_time"],
+                "spark_time": json_result["spark_time"],
+                "translation_time": json_result["translation_time"],
             }
             if not filename.endswith(".json"):
                 filename = filename + ".json"
