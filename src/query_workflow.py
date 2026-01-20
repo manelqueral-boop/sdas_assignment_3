@@ -1,4 +1,6 @@
 import argparse
+import os
+
 import dotenv
 import pandas as pd
 import json
@@ -73,11 +75,28 @@ def benchmark_query(query_id, provider):
             em_score = evaluate_spark_sql(golden_query_spark, spark_sql_query, spark_session)
             print(f"Spider Exact Match Score: {em_score}")
 
+        if args.save is not None:
+            filename = args.save
+            output = {
+                "jaccard": ea,
+                "spider": em_score,
+                "llm_querry": json_result["sparksql_query"],
+                "gold_querry": golden_query_spark,
+                "llm_requests": json_result["llm_requests"],
+            }
+            if not filename.endswith(".json"):
+                filename = filename + ".json"
+            output_path = os.path.join(os.getcwd(),filename)
+            with open(output_path, 'w') as f:
+                json.dump(output, f, indent=4)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Benchmark a specific query ID.")
     parser.add_argument("--id", type=int, default=1, help="Query ID to benchmark (default: 1)")
     parser.add_argument("--provider", type=str, default="google", help="LLM provider (default: google)")
+    parser.add_argument("--save", type=str, default=None, help="Save results to a json file")
+
     args = parser.parse_args()
     
     benchmark_query(args.id, args.provider)
