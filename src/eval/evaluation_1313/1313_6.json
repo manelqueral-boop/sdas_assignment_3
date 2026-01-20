@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 0,
+    "nl_querry": "How many students in the Student_Club are from the College of Engineering? ",
+    "llm_querry": "SELECT COUNT(`T1`.`member_id`) FROM `member` AS `T1` INNER JOIN `major` AS `T2` ON `T1`.`link_to_major` = `T2`.`major_id` WHERE `T2`.`college` = 'College of Engineering'",
+    "gold_querry": "SELECT COUNT(T1.member_id) FROM member AS T1 INNER JOIN major AS T2 ON T1.link_to_major = T2.major_id WHERE T2.college = 'College of Engineering'",
+    "llm_requests": 7,
+    "total_time": 22.484714031219482,
+    "spark_time": 0.44553685188293457,
+    "translation_time": 22.039177179336548
+}

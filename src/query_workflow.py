@@ -85,26 +85,29 @@ def benchmark_query(query_id, provider):
                 "llm_querry": json_result["sparksql_query"],
                 "gold_querry": golden_query_spark,
                 "llm_requests": json_result["llm_requests"],
+                "total_time": json_result["total_time"],
+                "spark_time": json_result["spark_time"],
+                "translation_time": json_result["translation_time"]
             }
             if not filename.endswith(".json"):
                 filename = filename + ".json"
             output_path = os.path.join(os.getcwd(),filename)
             with open(output_path, 'w') as f:
                 json.dump(output, f, indent=4)
-    elif json_result["execution_status"] == "INVALID":
+    elif json_result["execution_status"] == "ERROR":
         if args.save is not None:
             filename = args.save
             output = {
                 "execution_status": json_result["execution_status"],
-                "jaccard": "None",
-                "spider": "None",
+                "jaccard": None,
+                "spider": None,
                 "nl_querry": nl_query,
-                "llm_querry": "None",
+                "llm_querry": json_result["sparksql_query"],
                 "gold_querry": golden_query_spark,
-                "llm_requests": json_result["llm_requests"],
-                "total_time": json_result["total_time"],
-                "spark_time": json_result["spark_time"],
-                "translation_time": json_result["translation_time"],
+                "llm_requests": None,
+                "total_time": None,
+                "spark_time": None,
+                "translation_time": None,
             }
             if not filename.endswith(".json"):
                 filename = filename + ".json"

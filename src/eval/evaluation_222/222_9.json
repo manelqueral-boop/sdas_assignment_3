@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.0,
+    "spider": 0,
+    "nl_querry": "What is the difference between the number of molecules that are carcinogenic and those that are not? label = '+' means molecules are carcinogenic; label = '-' means molecules are non-carcinogenic; difference = SUBTRACT(SUM(label = '+'), SUM(label = '-'))",
+    "llm_querry": "SELECT SUM(CASE WHEN `label` = '+' THEN 1 ELSE 0 END) - SUM(CASE WHEN `label` = '-' THEN 1 ELSE 0 END) AS difference FROM `molecule`;",
+    "gold_querry": "SELECT COUNT(CASE WHEN T.label = '+' THEN T.molecule_id ELSE NULL END) - COUNT(CASE WHEN T.label = '-' THEN T.molecule_id ELSE NULL END) AS diff_car_notcar FROM molecule AS t",
+    "llm_requests": 5,
+    "total_time": 42.677637338638306,
+    "spark_time": 0.2640070915222168,
+    "translation_time": 42.41363024711609
+}

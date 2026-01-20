@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 1,
+    "nl_querry": "Identify the race of the superhero who weighed 169 kg. weighed 169 kg refers to weight_kg = 169",
+    "llm_querry": "SELECT T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.weight_kg = 169",
+    "gold_querry": "SELECT T2.race FROM superhero AS T1 INNER JOIN race AS T2 ON T1.race_id = T2.id WHERE T1.weight_kg = 169",
+    "llm_requests": 5,
+    "total_time": 12.94823694229126,
+    "spark_time": 0.3988358974456787,
+    "translation_time": 12.549401044845581
+}

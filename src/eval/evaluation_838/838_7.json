@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 1,
+    "nl_querry": "Provide the full name of the superhero named Alien. ",
+    "llm_querry": "SELECT full_name FROM superhero WHERE superhero_name = 'Alien'",
+    "gold_querry": "SELECT full_name FROM superhero WHERE superhero_name = 'Alien'",
+    "llm_requests": 5,
+    "total_time": 12.817687034606934,
+    "spark_time": 0.1252129077911377,
+    "translation_time": 12.692474126815796
+}

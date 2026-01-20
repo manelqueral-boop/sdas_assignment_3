@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 1,
+    "nl_querry": "What is the total amount of money spent for food? total amount of money spent refers to SUM(spent); spent for food refers to category = 'Food'",
+    "llm_querry": "SELECT SUM(spent) FROM budget WHERE category = 'Food'",
+    "gold_querry": "SELECT SUM(spent) FROM budget WHERE category = 'Food'",
+    "llm_requests": 6,
+    "total_time": 27.609757900238037,
+    "spark_time": 0.2882699966430664,
+    "translation_time": 27.32148790359497
+}

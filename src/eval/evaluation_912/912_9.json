@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 1,
+    "nl_querry": "What's the reference name of Marina Bay Street Circuit? reference name refers to circuitRef; Marina Bay Street Circuit refers to circuits.name = 'Marina Bay Street Circuit'",
+    "llm_querry": "SELECT circuitRef FROM circuits WHERE name = 'Marina Bay Street Circuit'",
+    "gold_querry": "SELECT circuitRef FROM circuits WHERE name = 'Marina Bay Street Circuit'",
+    "llm_requests": 5,
+    "total_time": 16.76453685760498,
+    "spark_time": 0.1148519515991211,
+    "translation_time": 16.64968490600586
+}

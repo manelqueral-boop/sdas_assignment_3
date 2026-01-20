@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.0,
+    "spider": 0,
+    "nl_querry": "Among the Artifact cards, which are black color and comes with foreign languague translation? Artifact card refers to originalType = 'Artifact'; black color refers to colors = 'B'; foreign language refers to language in foreign_data",
+    "llm_querry": "SELECT c.name, fd.language FROM cards c JOIN foreign_data fd ON c.uuid = fd.uuid WHERE c.originalType = 'Artifact' AND c.colors = 'B' AND fd.language IS NOT NULL AND fd.language != '';",
+    "gold_querry": "SELECT DISTINCT T1.name FROM cards AS T1 INNER JOIN foreign_data AS T2 ON T1.uuid = T2.uuid WHERE T1.originalType = 'Artifact' AND T1.colors = 'B'",
+    "llm_requests": 5,
+    "total_time": 14.769869804382324,
+    "spark_time": 1.2403597831726074,
+    "translation_time": 13.529510021209717
+}

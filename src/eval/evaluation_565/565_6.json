@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 0,
+    "nl_querry": "User No.23853 gave a comment to a post at 9:08:18 on 2013/7/12, was that post well-finished? user no. 23853 refers to UserId = '23853'; at 9:08:18 on 2013/7/12 refers to CreationDate = '2013-07-12 09:08:18.0'; not well-finished refers to ClosedDate IS NULL and vice versa",
+    "llm_querry": "SELECT CASE WHEN T2.ClosedDate IS NOT NULL THEN 'Well-finished' ELSE 'Not well-finished' END AS PostStatus FROM comments AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE T1.UserId = 23853 AND T1.CreationDate = TIMESTAMP '2013-07-12 09:08:18'",
+    "gold_querry": "SELECT IF(T2.ClosedDate IS NULL, 'NOT well-finished', 'well-finished') AS resylt FROM comments AS T1 INNER JOIN posts AS T2 ON T1.PostId = T2.Id WHERE T1.UserId = 23853 AND T1.CreationDate = '2013-07-12 09:08:18.0'",
+    "llm_requests": 5,
+    "total_time": 20.100478887557983,
+    "spark_time": 0.1231238842010498,
+    "translation_time": 19.977355003356934
+}

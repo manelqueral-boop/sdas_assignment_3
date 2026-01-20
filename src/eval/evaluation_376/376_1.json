@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.5555555555555556,
+    "spider": 0,
+    "nl_querry": "What are the card layout of cards with keyword of flying? ",
+    "llm_querry": "SELECT layout FROM cards WHERE keywords LIKE '%Flying%'",
+    "gold_querry": "SELECT layout FROM cards WHERE keywords = 'Flying'",
+    "llm_requests": 5,
+    "total_time": 11.826633930206299,
+    "spark_time": 0.40682482719421387,
+    "translation_time": 11.419809103012085
+}
