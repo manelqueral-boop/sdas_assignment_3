@@ -1,0 +1,12 @@
+{
+    "execution_status": "ERROR",
+    "jaccard": null,
+    "spider": null,
+    "nl_querry": "Which racetrack hosted the most recent race? Indicate the full location. full location refers to location+country; most recent race = MAX(date)\n\n",
+    "llm_querry": "SELECT T2.location, T2.country FROM races AS T1 INNER JOIN circuits AS T2 ON T1.circuitId = T2.circuitId ORDER BY T1.date DESC LIMIT 1;",
+    "gold_querry": "SELECT T1.location FROM circuits AS T1 INNER JOIN races AS T2 ON T1.circuitId = T2.circuitId ORDER BY T2.date DESC LIMIT 1",
+    "llm_requests": null,
+    "total_time": null,
+    "spark_time": null,
+    "translation_time": null
+}

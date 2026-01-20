@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 1,
+    "nl_querry": "List all of the College of Humanities and Social Sciences' departments. ",
+    "llm_querry": "SELECT DISTINCT `department` FROM `major` WHERE `college` = 'College of Humanities and Social Sciences'",
+    "gold_querry": "SELECT department FROM major WHERE college = 'College of Humanities and Social Sciences'",
+    "llm_requests": 5,
+    "total_time": 13.400153160095215,
+    "spark_time": 0.3050861358642578,
+    "translation_time": 13.095067024230957
+}

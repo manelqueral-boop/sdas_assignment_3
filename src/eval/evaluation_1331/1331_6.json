@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.0,
+    "spider": 0,
+    "nl_querry": "What is the amount of the funds that the Vice President received? 'Vice President' is a position of Student Club; funds received refers to amount.",
+    "llm_querry": "SELECT SUM(T1.amount) FROM income AS T1 JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T2.position = 'Vice President'",
+    "gold_querry": "SELECT T2.amount FROM member AS T1 INNER JOIN income AS T2 ON T1.member_id = T2.link_to_member WHERE T1.position = 'Vice President'",
+    "llm_requests": 5,
+    "total_time": 11.635454893112183,
+    "spark_time": 0.45204687118530273,
+    "translation_time": 11.18340802192688
+}

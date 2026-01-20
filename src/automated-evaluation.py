@@ -55,7 +55,7 @@ def evaluation(selected):
         data.append(row)
 
         for i,r in enumerate(results):
-            row =[f"LLM Queray #{i}",Paragraph(r['llm_querry'], styles['Normal']),'-' if r['jaccard'] is None else f"{r['jaccard']:.2f}",'-' if r['spider'] is None else r['spider'], r['execution_status'] ]
+            row =[f"LLM Queray #{i}",Paragraph(r['llm_querry'], styles['Normal']) if r['llm_querry'] is not None else '-' ,'-' if r['jaccard'] is None else f"{r['jaccard']:.2f}",'-' if r['spider'] is None else r['spider'], r['execution_status'] ]
             data.append(row)
 
         table = Table(data, colWidths=[3.5*cm , 10*cm,1*cm,1*cm, 2*cm])
@@ -140,8 +140,10 @@ def evaluation(selected):
         # Add plot to story
         story.append(Image(buf, width=400, height=200))  # adjust size as needed
         story.append(Spacer(1, 12))
-
-        avg_trans_time = sum(time) / (len(time)-count)
+        if sum(time)!=0:
+            avg_trans_time = sum(time) / (len(time)-count)
+        else:
+            avg_trans_time = 0
         time=list()
 
         for i, r in enumerate(results):
@@ -149,12 +151,18 @@ def evaluation(selected):
                 time.append(float(f"{r['total_time']:.2f}"))
             else:
                 pass
-        avg_total_time = sum(time) / (len(time))
+        if sum(time)!=0:
+            avg_total_time = sum(time) / (len(time))
+        else:
+            avg_total_time = 0
+        story.append(Spacer(1, 12))
         story.append(Paragraph(f"Average translation time: {avg_trans_time:.2f}", styles["Normal"]))
         story.append(Paragraph(f"Average total time: {avg_total_time:.2f}", styles["Normal"]))
 
-        avg_trans_times.append(avg_trans_time)
-        avg_total_times.append(avg_total_time)
+        if avg_trans_time!=0:
+            avg_trans_times.append(avg_trans_time)
+        if avg_total_time!=0:
+            avg_total_times.append(avg_total_time)
         doc.build(story)
 
 
@@ -188,7 +196,7 @@ def evaluation(selected):
     story.append(Image(buf, width=400, height=200))  # adjust size as needed
     story.append(Spacer(1, 12))
     avgOneSolution= sum(at_least_one_jarcater) / len(at_least_one_jarcater)
-    story.append(Paragraph(f"The Model executes {avgOneSolution:.2f}% of queries right (with max 10 tries)", styles["Normal"]))
+    story.append(Paragraph(f"The Model executes {(avgOneSolution*100):.2f}% of queries right (with max 10 tries)", styles["Normal"]))
 
 
     doc.build(story)
@@ -223,12 +231,20 @@ def start():
     if args.n > highest_id:
         print("to many questions selected")
         return 1
-    selected = random.sample(range(0,highest_id+1), args.n)
-    #selected = [222,391,565,757,838,912,1380,376,1313]
-    #selected = [1313]
+
+    # for debugging
+    #selected2 = [222, 391, 565, 757, 838, 912, 1380, 376, 1313, 1331,308,1221,950,1000,921,458, 1363,462,1460,1053]
+    flag = True
+    while flag:
+        selected = random.sample(range(0,highest_id+1), args.n)
+        if not set(selected): #& set(selected2): # For Debugging
+            flag = False
+
+    #selected = [1221]
+    #selected=selected2
     data_generation(selected)
     evaluation(selected)
-
+    print(f"Finished with: {selected}")
     return 0
 
 

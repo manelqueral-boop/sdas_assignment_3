@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.0,
+    "spider": 0,
+    "nl_querry": "How many bonds are created by bonding atoms with chlorine element? chlorine refers to element = 'cl'",
+    "llm_querry": "SELECT COUNT(DISTINCT T1.bond_id) FROM connected AS T1 INNER JOIN atom AS T2 ON T1.atom_id = T2.atom_id INNER JOIN atom AS T3 ON T1.atom_id2 = T3.atom_id WHERE T2.element = 'cl' OR T3.element = 'cl'",
+    "gold_querry": "SELECT COUNT(T1.bond_id) FROM connected AS T1 INNER JOIN atom AS T2 ON T1.atom_id = T2.atom_id WHERE T2.element = 'cl'",
+    "llm_requests": 6,
+    "total_time": 13.323267936706543,
+    "spark_time": 0.6742699146270752,
+    "translation_time": 12.648998022079468
+}

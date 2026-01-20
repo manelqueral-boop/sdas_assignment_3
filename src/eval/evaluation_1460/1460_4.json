@@ -1,0 +1,12 @@
+{
+    "execution_status": "ERROR",
+    "jaccard": null,
+    "spider": null,
+    "nl_querry": "Write the full name of the member who spent money for water, veggie tray and supplies and include the cost of it. full name refers to first_name, last name; spent money for refers expense description; expense_description = 'Water, Veggie tray, supplies'",
+    "llm_querry": "SELECT `m`.`first_name`, `m`.`last_name`, `e`.`expense_description`, `e`.`cost` FROM `member` AS `m` JOIN `expense` AS `e` ON `m`.`member_id` = `e`.`member_id` WHERE `e`.`expense_description` = 'Water, Veggie tray, supplies'",
+    "gold_querry": "SELECT T2.first_name, T2.last_name, T1.cost FROM expense AS T1 INNER JOIN member AS T2 ON T1.link_to_member = T2.member_id WHERE T1.expense_description = 'Water, Veggie tray, supplies'",
+    "llm_requests": null,
+    "total_time": null,
+    "spark_time": null,
+    "translation_time": null
+}

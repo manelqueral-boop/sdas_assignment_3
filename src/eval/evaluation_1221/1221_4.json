@@ -1,0 +1,12 @@
+{
+    "execution_status": "ERROR",
+    "jaccard": null,
+    "spider": null,
+    "nl_querry": "Provide the ID, sex, birthday of all patients diagnosed with 'RA' that are within the UN normal index. within the UN normal index refers to UN < 30; Diagnosis = 'RA'",
+    "llm_querry": "SELECT `p`.`ID`, `p`.`sex`, `p`.`birthday` FROM `patient` AS `p` JOIN `examination` AS `e` ON `p`.`ID` = `e`.`patient_ID` WHERE `e`.`diagnosis` = 'RA' AND `e`.`UN` < 30",
+    "gold_querry": "SELECT DISTINCT T1.ID, T1.SEX, T1.Birthday FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.UN < 30 AND T1.Diagnosis = 'RA'",
+    "llm_requests": null,
+    "total_time": null,
+    "spark_time": null,
+    "translation_time": null
+}

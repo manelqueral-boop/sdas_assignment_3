@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.5454545454545454,
+    "spider": 0,
+    "nl_querry": "Please list the constructor names with 0 points at race 291. race at 291 refers to raceID = 291;",
+    "llm_querry": "SELECT T1.name FROM constructors AS T1 INNER JOIN constructorresults AS T2 ON T1.constructorId = T2.constructorId WHERE T2.raceId = 291 AND T2.points = 0;",
+    "gold_querry": "SELECT T2.name FROM constructorStandings AS T1 INNER JOIN constructors AS T2 ON T1.constructorId = T2.constructorId WHERE T1.points = 0 AND T1.raceId = 291",
+    "llm_requests": 5,
+    "total_time": 18.07512903213501,
+    "spark_time": 0.35538792610168457,
+    "translation_time": 17.719741106033325
+}

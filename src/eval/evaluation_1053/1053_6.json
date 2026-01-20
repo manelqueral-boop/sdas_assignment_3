@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 1.0,
+    "spider": 1,
+    "nl_querry": "List the football teams that has a chance creation passing class of Risky. Inidcate its short name only. chance creation passing class refers to chanceCreationPassingClass; chanceCreationPassingClass = 'Risky'; short name refers to team_short_name;",
+    "llm_querry": "SELECT T1.team_short_name FROM team AS T1 JOIN team_attributes AS T2 ON T1.team_api_id = T2.team_api_id WHERE T2.chanceCreationPassingClass = 'Risky'",
+    "gold_querry": "SELECT DISTINCT t1.team_short_name FROM Team AS t1 INNER JOIN Team_attributes AS t2 ON t1.team_api_id = t2.team_api_id WHERE t2.chanceCreationPassingClass = 'Risky'",
+    "llm_requests": 5,
+    "total_time": 11.569661855697632,
+    "spark_time": 0.34914207458496094,
+    "translation_time": 11.220519781112671
+}

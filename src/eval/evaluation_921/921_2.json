@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.0,
+    "spider": 0,
+    "nl_querry": "Please give more information about the Formula_1 races that used the Silverstone Circuit. more information refers to url",
+    "llm_querry": "SELECT T1.name, T1.url FROM races AS T1 INNER JOIN circuits AS T2 ON T1.circuitId = T2.circuitId WHERE T2.name = 'Silverstone Circuit'",
+    "gold_querry": "SELECT DISTINCT T1.url FROM circuits AS T1 INNER JOIN races AS T2 ON T2.circuitID = T1.circuitId WHERE T1.name = 'Silverstone Circuit'",
+    "llm_requests": 5,
+    "total_time": 13.906661033630371,
+    "spark_time": 0.39096593856811523,
+    "translation_time": 13.515695095062256
+}

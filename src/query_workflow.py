@@ -114,6 +114,26 @@ def benchmark_query(query_id, provider):
             output_path = os.path.join(os.getcwd(),filename)
             with open(output_path, 'w') as f:
                 json.dump(output, f, indent=4)
+    elif json_result["execution_status"] == "NOT_EXECUTED":
+        if args.save is not None:
+            filename = args.save
+            output = {
+                "execution_status": json_result["execution_status"],
+                "jaccard": None,
+                "spider": None,
+                "nl_querry": nl_query,
+                "llm_querry": None,
+                "gold_querry": golden_query_spark,
+                "llm_requests": None,
+                "total_time": None,
+                "spark_time": None,
+                "translation_time": None,
+            }
+            if not filename.endswith(".json"):
+                filename = filename + ".json"
+            output_path = os.path.join(os.getcwd(),filename)
+            with open(output_path, 'w') as f:
+                json.dump(output, f, indent=4)
 
 
 

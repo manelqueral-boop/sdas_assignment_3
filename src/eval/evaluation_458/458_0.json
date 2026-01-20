@@ -1,0 +1,12 @@
+{
+    "execution_status": "VALID",
+    "jaccard": 0.0,
+    "spider": 0,
+    "nl_querry": "How many artists have designed a card with a black border color and is available in both \"arena\" and \"mtgo\" printing type? available in both \"arena\" and \"mtgo\" refers to availability like '%arena,mtgo%'",
+    "llm_querry": "SELECT COUNT(DISTINCT artist) FROM cards WHERE borderColor = 'black' AND availability LIKE '%arena,mtgo%'",
+    "gold_querry": "SELECT COUNT(CASE WHEN availability LIKE '%arena,mtgo%' AND borderColor = 'black' THEN 1 ELSE NULL END) FROM cards",
+    "llm_requests": 5,
+    "total_time": 11.603492736816406,
+    "spark_time": 0.8431241512298584,
+    "translation_time": 10.760368585586548
+}
