@@ -2,17 +2,20 @@ import argparse
 import json
 import os
 import random
+from io import BytesIO
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import textwrap
 
 from matplotlib.backends.backend_pdf import PdfPages
-
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer, TableStyle
+from matplotlib.ticker import FixedLocator
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, Spacer, TableStyle, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib import colors
+from PyPDF2 import PdfReader, PdfWriter
 from os import mkdir
 
 from config import (
@@ -22,11 +25,14 @@ from config import (
 
 def evaluation(selected):
     cwd = os.getcwd()
-
+    writer = PdfWriter()
     for id in selected:
+
         doc = SimpleDocTemplate(os.path.join(cwd, "eval", f"evaluation_{id}", f"report_{id}.pdf"), pagesize=A4)
         styles = getSampleStyleSheet()
         story = []
+        story.append(Paragraph(f"Report of ID {id}", styles["Title"]))
+
         results = list()
         for i in range(0, args.m):
 
@@ -58,12 +64,45 @@ def evaluation(selected):
             ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
             ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
         ])
-
+        story.append(table)
+        story.append(Spacer(1, 12))
+        story.append(Paragraph("(Requests; llm query):", styles['Normal']))
         # Apply style to table
         table.setStyle(style)
-        story.append(table)
+
+
+        n_values = list()
+        times = list()
+        for i, r in enumerate(results):
+            n_values.append(i)
+            times.append(r['llm_requests'])
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.bar(n_values, times, color='skyblue')
+        ax.xaxis.set_major_locator(FixedLocator(n_values))
+        ax.set_xlabel("LLM Query number")
+        ax.set_ylabel("requests")
+
+        # Save plot to in-memory buffer
+        buf = BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight')
+        buf.seek(0)
+        plt.close(fig)
+
+        # Add plot to story
+        story.append(Image(buf, width=400, height=200))  # adjust size as needed
+        story.append(Spacer(1, 12))
+
         doc.build(story)
+
+
+
+### AUTOMERGE TO BIG REPORT
+        reader = PdfReader(os.path.join(cwd, "eval", f"evaluation_{id}", f"report_{id}.pdf"))
+        for page in reader.pages:
+            writer.add_page(page)
         pass
+    with open(os.path.join(cwd, "eval", f"report.pdf"), "wb") as f:
+        writer.write(f)
     return 0
 
 def data_generation(selected):
@@ -91,6 +130,7 @@ def start():
         print("to many questions selected")
         return 1
     selected = random.sample(range(0,highest_id+1), args.n)
+    #selected = [513,1483]
     data_generation(selected)
     evaluation(selected)
 
