@@ -78,8 +78,10 @@ def benchmark_query(query_id, provider):
         if args.save is not None:
             filename = args.save
             output = {
+                "execution_status": json_result["execution_status"],
                 "jaccard": ea,
                 "spider": em_score,
+                "nl_querry": nl_query,
                 "llm_querry": json_result["sparksql_query"],
                 "gold_querry": golden_query_spark,
                 "llm_requests": json_result["llm_requests"],
@@ -89,6 +91,25 @@ def benchmark_query(query_id, provider):
             output_path = os.path.join(os.getcwd(),filename)
             with open(output_path, 'w') as f:
                 json.dump(output, f, indent=4)
+    elif json_result["execution_status"] == "INVALID":
+        if args.save is not None:
+            filename = args.save
+            output = {
+                "execution_status": json_result["execution_status"],
+                "jaccard": "None",
+                "spider": "None",
+                "nl_querry": nl_query,
+                "llm_querry": "None",
+                "gold_querry": golden_query_spark,
+                "llm_requests": json_result["llm_requests"],
+            }
+            if not filename.endswith(".json"):
+                filename = filename + ".json"
+            output_path = os.path.join(os.getcwd(),filename)
+            with open(output_path, 'w') as f:
+                json.dump(output, f, indent=4)
+
+
 
 
 if __name__ == "__main__":
